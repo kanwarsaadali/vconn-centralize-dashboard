@@ -10,15 +10,17 @@ import {
 } from 'recharts';
 
 const data = [
-  { name: 'High', value: 12 },
-  { name: 'Medium', value: 8 },
-  { name: 'Low', value: 5 },
-
+  { name: 'PROD', value: 240 },
+  { name: 'Dev', value: 4810 },
+  { name: 'VDI', value: 150 },
+  { name: 'UAT', value: 60 },
+  { name: 'Production', value: 290 },
+  { name: 'DevOps', value: 120 },
 ];
 
-const COLORS = ['#ef4444', '#3b82f6', '#22c55e', '#ef4444', '#6366f1', '#a855f7'];
+const COLORS = ['#3b82f6', '#22c55e', '#f59e0b', '#ef4444', '#6366f1', '#a855f7'];
 
-export default function SO_SeverityDonut() {
+export default function DA_StatusPieCharts() {
   return (
     <div className="bg-white p-4 rounded-xl shadow" style={{ height: '500px' }}>
       {/* Optional title */}

@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -18,16 +17,12 @@ const eventLocations = [
   { lat: 30.3753, lng: 69.3451, label: 'Pakistan' },
   { lat: 20.5937, lng: 78.9629, label: 'India' },
   { lat: 37.0902, lng: -95.7129, label: 'USA' },
-{ lat: 51.1657, lng: 10.4515, label: 'Germany' },
-{ lat: 61.5240, lng: 105.3188, label: 'Russia' },
-
-
 ];
 
-export default function EventMap() {
+export default function DA_EventMap() {
   return (
     <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200 w-full">
-      {/* <h2 className="text-lg font-semibold mb-4">Event Map</h2> */}
+      <h2 className="text-lg font-semibold mb-4"></h2>
 
       {/* 🔍 Bigger map box */}
       <div className="w-full h-[400px] md:h-[400px] xl:h-[450px]">

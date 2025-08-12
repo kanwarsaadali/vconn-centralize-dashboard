@@ -1,42 +1,42 @@
 # Stage 1: Build the application
 FROM node:22-alpine AS builder
 
-# Set the working directory for building
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to install dependencies
+# Copy package files and install all dependencies
 COPY package.json package-lock.json ./
-
-# Install build dependencies
 RUN npm install
 
-# Copy the rest of the application files for the build process
+# Copy the rest of the app and build it
 COPY . .
-
-# Build the application (production build)
 RUN npm run build
 
-# Stage 2: Setup the production image
+# Stage 2: Create production image
 FROM node:22-alpine AS production
 
-# Set the working directory for production
+# Set working directory
 WORKDIR /app
 
-# Install only the production dependencies
+# Copy only the package files and install only production deps
 COPY package.json package-lock.json ./
-RUN npm install --only=production
 
-# Copy the build artifacts from the builder stage
+# Install only production dependencies (using --legacy-peer-deps for safety)
+RUN npm install --only=production --legacy-peer-deps
+
+# Copy build artifacts from builder stage
 COPY --from=builder /app/.next /app/.next
 
-# Exclude copying the `public` folder
-# The `public` folder will be mounted as a volume during container runtime
+# Copy other required files (if any, e.g., next.config.js or public assets)
+# You can uncomment this if needed
+# COPY --from=builder /app/public /app/public
+# COPY --from=builder /app/next.config.js /app/next.config.js
 
-# Expose port 3001 for the app
+# Expose the port
 EXPOSE 3001
 
-# Set the environment variable to specify the port (optional)
+# Set the environment variable
 ENV PORT=3001
 
-# Command to run the app (use port 3001)
+# Start the app
 CMD ["npm", "run", "start", "--", "-p", "3001"]
