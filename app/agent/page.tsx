@@ -24,7 +24,7 @@ export default function DashboardPage() {
 
         {/* ✅ CounterCards full-width */}
         <div style={{ width: '100%' }}>
-          <AgentCounterCardss/>
+          <AgentCounterCards/>
         </div>
 
         {/* ✅ One row with EnvironmentPie, SeverityBar, EnvironmentPie */}
