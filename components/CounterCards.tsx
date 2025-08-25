@@ -2,12 +2,21 @@
 
 import { useEffect, useState } from 'react';
 
-const SEVERITY_MAP = {
-  1: 'Critical',
-  2: 'High',
-  3: 'Medium',
-  4: 'Low',
+// const SEVERITY_MAP = {
+//   1: 'Critical',
+//   2: 'High',
+//   3: 'Medium',
+//   4: 'Low',
+// };
+
+
+const SEVERITY_MAP: Record<string, string> = {
+  "1": "Critical",
+  "2": "High",
+  "3": "Medium",
+  "4": "Low",
 };
+
 
 // Reusable counter component
 function Counter({ value }: { value: number }) {
