@@ -9,7 +9,11 @@ import {
 } from 'recharts';
 import { useEffect, useState } from 'react';
 
-const COLORS = ['#22c55e', '#0ea5e9', '#ef4444'];
+// Normal colors for other slices
+const COLORS = ['#22c55e', '#0ea5e9', '#f59e0b', '#6366f1', '#14b8a6'];
+
+// Highlight colors for top 3
+const HIGHLIGHT_COLORS = ['#dc2626', '#ef4444', '#f87171'];
 
 const renderCustomizedLabel = ({ name, percent }: any) =>
   `${name} (${(percent * 100).toFixed(0)}%)`;
@@ -31,6 +35,9 @@ export default function FimEventDonut() {
           name: key,
           value: counts[key],
         }));
+
+        // sort descending by value
+        formattedData.sort((a, b) => b.value - a.value);
 
         setChartData(formattedData);
       } catch (err) {
@@ -63,9 +70,26 @@ export default function FimEventDonut() {
                 label={renderCustomizedLabel}
                 paddingAngle={2}
               >
-                {chartData.map((entry, idx) => (
-                  <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
-                ))}
+                {chartData.map((entry, idx) => {
+                  if (idx < 3) {
+                    return (
+                      <Cell
+                        key={`cell-${idx}`}
+                        fill={HIGHLIGHT_COLORS[idx]}
+                        stroke="#fff"
+                        strokeWidth={1}
+                      />
+                    );
+                  }
+                  return (
+                    <Cell
+                      key={`cell-${idx}`}
+                      fill={COLORS[idx % COLORS.length]}
+                      stroke="#fff"
+                      strokeWidth={1}
+                    />
+                  );
+                })}
               </Pie>
               <Tooltip />
             </PieChart>
@@ -77,16 +101,24 @@ export default function FimEventDonut() {
 
       {/* Custom Legend */}
       <ul className="flex flex-wrap justify-center gap-6 mt-4 text-sm">
-        {chartData.map((entry, idx) => (
-          <li key={idx} className="flex items-center gap-2">
-            <span
-              className="inline-block w-3 h-3 rounded-full"
-              style={{ backgroundColor: COLORS[idx % COLORS.length] }}
-            ></span>
-            <span className="text-gray-700 font-medium">{entry.name}</span>
-            <span className="ml-1 text-gray-500">({entry.value.toLocaleString()})</span>
-          </li>
-        ))}
+        {chartData.map((entry, idx) => {
+          const color =
+            idx < 3
+              ? HIGHLIGHT_COLORS[idx]
+              : COLORS[idx % COLORS.length];
+          return (
+            <li key={idx} className="flex items-center gap-2">
+              <span
+                className="inline-block w-3 h-3 rounded-full"
+                style={{ backgroundColor: color }}
+              ></span>
+              <span className="text-gray-700 font-medium">{entry.name}</span>
+              <span className="ml-1 text-gray-500">
+                ({entry.value.toLocaleString()})
+              </span>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

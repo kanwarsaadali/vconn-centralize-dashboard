@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import {
   BarChart,
   Bar,
@@ -10,20 +11,33 @@ import {
   CartesianGrid,
 } from 'recharts';
 
-const data = [
-  { user: 'admin', events: 120 },
-  { user: 'john_doe', events: 95 },
-  { user: 'support', events: 78 },
-  { user: 'manager', events: 60 },
-  { user: 'qa_team', events: 45 },
-];
-
 export default function TargetUserBar() {
+  const [data, setData] = useState<{ user: string; events: number }[]>([]);
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE}/events-by-user`)
+      .then(res => res.json())
+      .then(apiData => {
+        if (apiData?.data) {
+          const formatted = apiData.data.map((item: Record<string, number>) => {
+            const [user, events] = Object.entries(item)[0];
+            return { user, events };
+          });
+          setData(formatted);
+        }
+      })
+      .catch(err => console.error('Error fetching events-by-user:', err));
+  }, []);
+
   return (
     <div className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
       <h2 className="text-lg font-semibold mb-2">Events by Target User</h2>
       <ResponsiveContainer width="100%" height={250}>
-        <BarChart data={data} layout="vertical" margin={{ top: 10, right: 30, left: 40, bottom: 5 }}>
+        <BarChart
+          data={data}
+          layout="vertical"
+          margin={{ top: 10, right: 30, left: 40, bottom: 5 }}
+        >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis type="number" />
           <YAxis type="category" dataKey="user" />

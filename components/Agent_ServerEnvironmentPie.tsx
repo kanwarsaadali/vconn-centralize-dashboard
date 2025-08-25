@@ -20,37 +20,11 @@ const COLORS = [
   '#14b8a6', '#eab308', '#f97316', '#a855f7', '#6366f1', '#dc2626'
 ];
 
-
-// const COLORS = [
-//   '#dc2626', // strong red
-//   '#ef4444', // lighter red
-//   '#f87171', // soft red
-//   '#fb923c', // orange
-//   '#f59e0b', // amber
-//   '#facc15', // yellow
-//   '#fbbf24', // warm yellow-orange
-//   '#b91c1c', // deep red
-//   '#7f1d1d', // dark red (danger)
-// ];
-
-
-// const COLORS = [
-//   '#ef4444', // Alert Red
-//   '#f97316', // Warning Orange
-//   '#facc15', // Caution Yellow
-//   '#fb923c', // Amber Orange
-//   '#fde047', // Light Yellow
-//   '#60a5fa', // Soft Blue (balance tone)
-//   '#34d399', // Soft Green (resolved/ok)
-//   '#e5e7eb', // Neutral Gray (background balance)
-//   '#991b1b', // Deep Red (critical)
-// ];
-
 // Custom label positioning to avoid overlap
 const renderCustomLabel = (props: any) => {
-  const { cx, cy, midAngle, innerRadius, outerRadius, percent, name } = props;
+  const { cx, cy, midAngle, outerRadius, percent, name } = props;
   const RADIAN = Math.PI / 180;
-  const radius = outerRadius + 20; // push labels out more
+  const radius = outerRadius + 20;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
@@ -75,20 +49,21 @@ export default function EnvironmentPie() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/vuln-by-department`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/agents-by-env`);
         const json = await res.json();
 
-        if (json?.percentages) {
-          const formatted: DataItem[] = Object.entries(json.percentages).map(
-            ([name, value]) => ({
+        if (json?.data) {
+          const formatted: DataItem[] = Object.entries(json.data)
+            .filter(([key]) => key !== 'Total') // ignore Total
+            .map(([name, value]) => ({
               name,
               value: Number(value),
-            })
-          );
+            }));
+
           setData(formatted);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching environment data:', error);
       } finally {
         setLoading(false);
       }
@@ -104,22 +79,22 @@ export default function EnvironmentPie() {
   return (
     <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-6">
       <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">
-        Environment Distribution
+        Server Environment
       </h3>
 
-      <div className="w-full max-w-4xl mx-auto" style={{ height: '360px' }}>
+      <div className="w-full max-w-4xl mx-auto" style={{ height: '400px' }}>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
               data={data}
               dataKey="value"
               nameKey="name"
-              cx="40%"
-              cy="50%"
+              cx="50%"
+              cy="45%"
               outerRadius="70%"
               innerRadius="35%"
               labelLine={true}
-              label={renderCustomLabel} // custom label renderer
+              label={renderCustomLabel}
               paddingAngle={2}
             >
               {data.map((_, index) => (
@@ -140,19 +115,22 @@ export default function EnvironmentPie() {
                 border: '1px solid #e5e7eb',
               }}
               formatter={(value: number, name: string) => [
-                `${value}%`,
+                value,
                 `${name}`,
               ]}
             />
 
             <Legend
-              layout="vertical"
-              verticalAlign="middle"
-              align="right"
+              layout="horizontal"
+              verticalAlign="bottom"
+              align="center"
               iconType="circle"
               wrapperStyle={{
                 fontSize: 12,
                 lineHeight: '22px',
+                whiteSpace: 'normal',
+                width: '100%',
+                marginTop: '10px',
               }}
             />
           </PieChart>

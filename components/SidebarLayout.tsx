@@ -3,11 +3,13 @@
 // import Link from 'next/link';
 // import { usePathname } from 'next/navigation';
 // import { ReactNode } from 'react';
+// import Image from 'next/image';
 
 // const menuItems = [
 //   { title: 'Dashboard', href: '/dashboard' },
 //   { title: 'Vulnerability', href: '/vulnerability' },
 //   { title: 'Event', href: '/events' },
+//   { title: 'Agent', href: '/agent' },
 //   { title: 'Fim', href: '/fim' },
 //   { title: 'SO', href: '/so' },
 //   { title: 'Settings', href: '/settings' },
@@ -29,17 +31,26 @@
 //           paddingTop: '20px',
 //         }}
 //       >
+//         {/* Logo */}
 //         <div
 //           style={{
 //             padding: '16px',
-//             fontWeight: 'bold',
-//             fontSize: '16px',
 //             borderBottom: '1px solid #374151',
-//             textAlign: 'center',
+//             display: 'flex',
+//             justifyContent: 'center',
+//             alignItems: 'center',
 //           }}
 //         >
-//           My Dashboard
+//           <Image
+//             src="/logo/logo-light.png"
+//             alt="Dashboard Logo"
+//             width={120}
+//             height={40}
+//             style={{ objectFit: 'contain' }}
+//           />
 //         </div>
+
+//         {/* Navigation Links */}
 //         <nav style={{ flex: 1, padding: '8px 0' }}>
 //           {menuItems.map((item, idx) => (
 //             <Link
@@ -61,6 +72,8 @@
 //             </Link>
 //           ))}
 //         </nav>
+
+//         {/* Footer */}
 //         <div
 //           style={{
 //             fontSize: '12px',
@@ -92,6 +105,7 @@ const menuItems = [
   { title: 'Dashboard', href: '/dashboard' },
   { title: 'Vulnerability', href: '/vulnerability' },
   { title: 'Event', href: '/events' },
+  { title: 'Agent', href: '/agent' },
   { title: 'Fim', href: '/fim' },
   { title: 'SO', href: '/so' },
   { title: 'Settings', href: '/settings' },
@@ -111,6 +125,11 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
           display: 'flex',
           flexDirection: 'column',
           paddingTop: '20px',
+          position: 'fixed',        // ✅ Sidebar fixed
+          top: 0,
+          left: 0,
+          bottom: 0,
+          height: '100vh',
         }}
       >
         {/* Logo */}
@@ -133,7 +152,7 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
         </div>
 
         {/* Navigation Links */}
-        <nav style={{ flex: 1, padding: '8px 0' }}>
+        <nav style={{ flex: 1, padding: '8px 0', overflowY: 'auto' }}>
           {menuItems.map((item, idx) => (
             <Link
               key={idx}
@@ -170,7 +189,17 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
       </aside>
 
       {/* Main Content */}
-      <main style={{ flex: 1, padding: '24px', overflowY: 'auto' }}>{children}</main>
+      <main
+        style={{
+          flex: 1,
+          padding: '24px',
+          marginLeft: '180px',   // ✅ space adjust for fixed sidebar
+          overflowY: 'auto',
+          width: 'calc(100% - 180px)',
+        }}
+      >
+        {children}
+      </main>
     </div>
   );
 }
