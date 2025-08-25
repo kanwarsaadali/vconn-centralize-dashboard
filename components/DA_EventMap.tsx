@@ -1,6 +1,6 @@
 'use client';
 
-import type {} from '../types/react-simple-maps';
+// import type {} from '../types/react-simple-maps';
 
 import React from 'react';
 import {
