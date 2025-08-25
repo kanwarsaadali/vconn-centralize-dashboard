@@ -45,7 +45,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Centralized Dashboard",
   description: "Vulnerability Summary App",
-});
+};
 
 export default function RootLayout({
   children,
