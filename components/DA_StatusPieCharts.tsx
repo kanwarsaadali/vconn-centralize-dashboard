@@ -40,21 +40,38 @@ export default function DA_StatusPieCharts() {
             outerRadius={140}
             stroke="none"
             labelLine={true}
-            label={({ name, percent, x, y, cx }) => {
-              const textAnchor = x > cx ? 'start' : 'end';
-              return (
-                <text
-                  x={x}
-                  y={y}
-                  textAnchor={textAnchor}
-                  dominantBaseline="central"
-                  fill="#374151"
-                  fontSize={14}
-                >
-                  {`${name} (${(percent * 100).toFixed(0)}%)`}
-                </text>
-              );
-            }}
+            // label={({ name, percent, x, y, cx }) => {
+            //   const textAnchor = x > cx ? 'start' : 'end';
+            //   return (
+            //     <text
+            //       x={x}
+            //       y={y}
+            //       textAnchor={textAnchor}
+            //       dominantBaseline="central"
+            //       fill="#374151"
+            //       fontSize={14}
+            //     >
+            //       {`${name} (${(percent * 100).toFixed(0)}%)`}
+            //     </text>
+            //   );
+            // }}
+
+            label={({ name, percent = 0, x, y, cx }) => {
+  const textAnchor = x > cx ? 'start' : 'end';
+  return (
+    <text
+      x={x}
+      y={y}
+      textAnchor={textAnchor}
+      dominantBaseline="central"
+      fill="#374151"
+      fontSize={14}
+    >
+      {`${name} (${(percent * 100).toFixed(0)}%)`}
+    </text>
+  );
+}}
+
             paddingAngle={2}
           >
             {data.map((entry, idx) => (

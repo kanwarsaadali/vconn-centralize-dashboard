@@ -13,13 +13,19 @@ import {
 
 type CountItem = {
   category: string;
-  Active_Count: number;
-  Disconnected_Count: number;
+  active?: number;
+  disconnected?: number;
+  decomissioned?: number;
+  pending?: number;
+  null?: number;
 };
 
-const COLORS = {
-  active: '#10b981', // green
-  disconnected: '#ef4444', // red
+const COLORS: Record<string, string> = {
+  active: '#10b981',        // green
+  disconnected: '#ef4444',  // red
+  decomissioned: '#6b7280', // gray
+  pending: '#f59e0b',       // amber
+  null: '#3b82f6',          // blue
 };
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -39,18 +45,28 @@ const CustomTooltip = ({ active, payload }: any) => {
 
 const VerticalStackedBarChart = () => {
   const [chartData, setChartData] = useState<CountItem[]>([]);
+  const [statusKeys, setStatusKeys] = useState<string[]>([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/agents-by-dept`);
+        const res = await fetch('http://128.2.99.235/agents-status-by-dept');
         const json = await res.json();
 
         const data = json.data;
+
+        // Collect all unique status keys (active, disconnected, decomissioned, etc.)
+        const keys = Array.from(
+          new Set(Object.values(data).flatMap((dept: any) => Object.keys(dept)))
+        );
+        setStatusKeys(keys);
+
         const formatted: CountItem[] = Object.keys(data).map((dept) => ({
           category: dept,
-          Active_Count: data[dept].active ?? 0,
-          Disconnected_Count: data[dept].disconnected ?? 0,
+          ...keys.reduce((acc: any, key) => {
+            acc[key] = data[dept][key] ?? 0;
+            return acc;
+          }, {}),
         }));
 
         setChartData(formatted);
@@ -80,7 +96,7 @@ const VerticalStackedBarChart = () => {
           textAlign: 'center',
         }}
       >
-        Active vs Disconnected Count (by Dept)
+        Agents Status by Department
       </h3>
 
       <ResponsiveContainer width="100%" height={450}>
@@ -97,13 +113,15 @@ const VerticalStackedBarChart = () => {
           <YAxis />
           <Tooltip content={<CustomTooltip />} />
           <Legend verticalAlign="top" height={36} />
-          <Bar dataKey="Active_Count" name="Active" stackId="a" fill={COLORS.active} />
-          <Bar
-            dataKey="Disconnected_Count"
-            name="Disconnected"
-            stackId="a"
-            fill={COLORS.disconnected}
-          />
+          {statusKeys.map((key) => (
+            <Bar
+              key={key}
+              dataKey={key}
+              name={key.charAt(0).toUpperCase() + key.slice(1)}
+              stackId="a"
+              fill={COLORS[key] || '#9ca3af'} // default gray if no color defined
+            />
+          ))}
         </BarChart>
       </ResponsiveContainer>
     </div>

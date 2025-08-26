@@ -2,28 +2,36 @@
 
 import { useEffect, useState } from 'react';
 
-const Table = ({ children, className }: React.HTMLAttributes<HTMLTableElement>) => (
-  <table className={`w-full text-sm text-left border-collapse ${className}`}>{children}</table>
+// ✅ Generic Table components
+const Table = ({ children, className, ...props }: React.TableHTMLAttributes<HTMLTableElement>) => (
+  <table className={`w-full text-sm text-left border-collapse ${className || ''}`} {...props}>
+    {children}
+  </table>
 );
 
-const TableHeader = ({ children }: { children: React.ReactNode }) => (
-  <thead className="bg-gray-100 text-gray-700">{children}</thead>
+const TableHeader = ({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) => (
+  <thead className="bg-gray-100 text-gray-700" {...props}>{children}</thead>
 );
 
-const TableBody = ({ children }: { children: React.ReactNode }) => (
-  <tbody className="divide-y divide-gray-200">{children}</tbody>
+const TableBody = ({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) => (
+  <tbody className="divide-y divide-gray-200" {...props}>{children}</tbody>
 );
 
-const TableRow = ({ children }: { children: React.ReactNode }) => (
-  <tr className="hover:bg-gray-50">{children}</tr>
+const TableRow = ({ children, ...props }: React.HTMLAttributes<HTMLTableRowElement>) => (
+  <tr className="hover:bg-gray-50" {...props}>{children}</tr>
 );
 
-const TableHead = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <th className={`px-4 py-2 text-xs font-semibold uppercase tracking-wider ${className}`}>{children}</th>
+const TableHead = ({ children, className = '', ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) => (
+  <th className={`px-4 py-2 text-xs font-semibold uppercase tracking-wider ${className}`} {...props}>
+    {children}
+  </th>
 );
 
-const TableCell = ({ children }: { children: React.ReactNode }) => (
-  <td className="px-4 py-2 whitespace-nowrap">{children}</td>
+// ✅ Fix: TableCell now accepts colSpan, rowSpan, className, etc.
+const TableCell = ({ children, className = '', ...props }: React.TdHTMLAttributes<HTMLTableCellElement>) => (
+  <td className={`px-4 py-2 whitespace-nowrap ${className}`} {...props}>
+    {children}
+  </td>
 );
 
 type APIItem = {
@@ -98,6 +106,7 @@ export default function SO_ConnectionsTable() {
                     <TableCell>{row.Count}</TableCell>
                   </TableRow>
                 ))}
+                {/* ✅ Now colSpan works */}
                 <TableRow>
                   <TableCell colSpan={5} className="text-right font-bold">
                     Total
@@ -133,4 +142,3 @@ export default function SO_ConnectionsTable() {
     </div>
   );
 }
-

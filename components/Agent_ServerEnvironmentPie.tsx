@@ -49,12 +49,12 @@ export default function EnvironmentPie() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/agents-by-env`);
+        const res = await fetch('http://128.2.99.235/agents-by-env');
         const json = await res.json();
 
         if (json?.data) {
           const formatted: DataItem[] = Object.entries(json.data)
-            .filter(([key]) => key !== 'Total') // ignore Total
+            .filter(([key]) => key !== 'Total') // exclude Total
             .map(([name, value]) => ({
               name,
               value: Number(value),

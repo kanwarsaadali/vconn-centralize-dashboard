@@ -40,12 +40,19 @@ export default function FimEnvironmentDonut() {
         );
         const json = await res.json();
 
+        // const formatted = Object.entries(json.percentages).map(
+        //   ([name, value]: [string, number]) => ({
+        //     name,
+        //     value: parseFloat(value.toFixed(2)),
+        //   })
+        // );
         const formatted = Object.entries(json.percentages).map(
-          ([name, value]: [string, number]) => ({
-            name,
-            value: parseFloat(value.toFixed(2)),
-          })
-        );
+  ([name, value]) => ({
+    name,
+    value: parseFloat((value as number).toFixed(2)),
+  })
+);
+
 
         // Sort descending so top counts are easily styled
         formatted.sort((a, b) => b.value - a.value);
@@ -85,21 +92,37 @@ export default function FimEnvironmentDonut() {
             outerRadius={100}
             paddingAngle={2}
             labelLine={true}
-            label={({ name, percent, x, y, cx }) => {
-              const textAnchor = x > cx ? 'start' : 'end';
-              return (
-                <text
-                  x={x}
-                  y={y}
-                  textAnchor={textAnchor}
-                  dominantBaseline="central"
-                  fill="#374151"
-                  fontSize={12}
-                >
-                  {`${name} (${(percent * 100).toFixed(0)}%)`}
-                </text>
-              );
-            }}
+            // label={({ name, percent, x, y, cx }) => {
+            //   const textAnchor = x > cx ? 'start' : 'end';
+            //   return (
+            //     <text
+            //       x={x}
+            //       y={y}
+            //       textAnchor={textAnchor}
+            //       dominantBaseline="central"
+            //       fill="#374151"
+            //       fontSize={12}
+            //     >
+            //       {`${name} (${(percent * 100).toFixed(0)}%)`}
+            //     </text>
+            //   );
+            // }}
+            label={({ name, percent = 0, x, y, cx }) => {
+  const textAnchor = x > cx ? 'start' : 'end';
+  return (
+    <text
+      x={x}
+      y={y}
+      textAnchor={textAnchor}
+      dominantBaseline="central"
+      fill="#374151"
+      fontSize={12}
+    >
+      {`${name} (${(percent * 100).toFixed(0)}%)`}
+    </text>
+  );
+}}
+
           >
             {data.map((_, idx) => {
               // Top 3 → Red family colors

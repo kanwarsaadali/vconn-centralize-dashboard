@@ -138,9 +138,13 @@ export default function EventMap() {
         >
           <ZoomableGroup zoom={1}>
             {geoFeatures.length > 0 && (
+              // <Geographies geography={{ type: 'FeatureCollection', features: geoFeatures }}>
+              //   {({ geographies }) =>
+              //     geographies.map((geo) => {
               <Geographies geography={{ type: 'FeatureCollection', features: geoFeatures }}>
-                {({ geographies }) =>
-                  geographies.map((geo) => {
+  {({ geographies }: { geographies: any[] }) =>
+    geographies.map((geo: any) => {
+
                     const isEventCountry = highlightedNames.has(geo.properties.name);
                     return (
                       <Geography

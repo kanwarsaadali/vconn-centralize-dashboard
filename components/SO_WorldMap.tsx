@@ -116,24 +116,43 @@ export default function EventMap() {
         >
           <ZoomableGroup zoom={1}>
             {geoFeatures.length > 0 && (
+              // <Geographies geography={{ type: 'FeatureCollection', features: geoFeatures }}>
+              //   {({ geographies }) =>
+              //     geographies.map((geo) => {
+              //       const isEventCountry = highlightedNames.has(geo.properties.name);
+              //       return (
+              //         <Geography
+              //           key={geo.rsmKey}
+              //           geography={geo}
+              //           style={{
+              //             default: { fill: isEventCountry ? '#3b82f6' : '#E5E7EB', outline: 'none' },
+              //             hover: { fill: isEventCountry ? '#2563eb' : '#d1d5db', outline: 'none' },
+              //             pressed: { fill: '#1d4ed8', outline: 'none' },
+              //           }}
+              //         />
+              //       );
+              //     })
+              //   }
+              // </Geographies>
               <Geographies geography={{ type: 'FeatureCollection', features: geoFeatures }}>
-                {({ geographies }) =>
-                  geographies.map((geo) => {
-                    const isEventCountry = highlightedNames.has(geo.properties.name);
-                    return (
-                      <Geography
-                        key={geo.rsmKey}
-                        geography={geo}
-                        style={{
-                          default: { fill: isEventCountry ? '#3b82f6' : '#E5E7EB', outline: 'none' },
-                          hover: { fill: isEventCountry ? '#2563eb' : '#d1d5db', outline: 'none' },
-                          pressed: { fill: '#1d4ed8', outline: 'none' },
-                        }}
-                      />
-                    );
-                  })
-                }
-              </Geographies>
+  {({ geographies }: { geographies: any[] }) =>
+    geographies.map((geo: any) => {
+      const isEventCountry = highlightedNames.has(geo.properties.name);
+      return (
+        <Geography
+          key={geo.rsmKey}
+          geography={geo}
+          style={{
+            default: { fill: isEventCountry ? '#3b82f6' : '#E5E7EB', outline: 'none' },
+            hover: { fill: isEventCountry ? '#2563eb' : '#d1d5db', outline: 'none' },
+            pressed: { fill: '#1d4ed8', outline: 'none' },
+          }}
+        />
+      );
+    })
+  }
+</Geographies>
+
             )}
 
             {/* Markers */}
