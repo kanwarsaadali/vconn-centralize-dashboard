@@ -17,21 +17,20 @@ export default function SODashboard() {
         <div className="bg-white p-4 rounded-xl shadow border border-gray-200">
           <h1 className="text-2xl font-bold text-gray-800">SO Dashboard</h1>
         </div>
-
+ <SO_SummaryCards />
         {/* Row 1: Summary Cards + World Map + Severity Donut */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-          <SO_SummaryCards />
-          <SO_WorldMap />
+          {/* <SO_SummaryCards /> */}
+          {/* <SO_WorldMap /> */}
           <SO_SeverityDonut />
+          <SO_WorldMap />
+          <SO_RuleTagsDonut />
+
         </div>
 
-        {/* Row 2: Rule Tags Donut + Alert Rules Table */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-          <SO_RuleTagsDonut />
-          <div className="xl:col-span-2">
+         <div className="w-full">
             <SO_AlertRulesTable />
           </div>
-        </div>
 
         {/* Row 3: Connections Table (Full Width) */}
         <div className="w-full">

@@ -57,7 +57,7 @@ export default function CveDetailsTable() {
 
   return (
     <div style={styles.card}>
-      <h2 style={styles.title}>CVE ID Description and Remediation</h2>
+      {/* <h2 style={styles.title}>CVE ID Description and Remediation</h2> */}
 
       {loading ? (
         <p style={{ textAlign: 'center' }}>Loading...</p>

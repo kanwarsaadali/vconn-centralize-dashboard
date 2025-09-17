@@ -16,41 +16,15 @@ type DataItem = {
 };
 
 const COLORS = [
-  '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
-  '#14b8a6', '#eab308', '#f97316', '#a855f7', '#6366f1', '#dc2626'
+  '#14B8A6', '#3366CC', '#FF9900', '#DC3912', '#990099',
+  '#0099C6', '#109618', '#FF6600', '#00544d', '#6366f1', '#dc2626'
 ];
 
-
-// const COLORS = [
-//   '#dc2626', // strong red
-//   '#ef4444', // lighter red
-//   '#f87171', // soft red
-//   '#fb923c', // orange
-//   '#f59e0b', // amber
-//   '#facc15', // yellow
-//   '#fbbf24', // warm yellow-orange
-//   '#b91c1c', // deep red
-//   '#7f1d1d', // dark red (danger)
-// ];
-
-
-// const COLORS = [
-//   '#ef4444', // Alert Red
-//   '#f97316', // Warning Orange
-//   '#facc15', // Caution Yellow
-//   '#fb923c', // Amber Orange
-//   '#fde047', // Light Yellow
-//   '#60a5fa', // Soft Blue (balance tone)
-//   '#34d399', // Soft Green (resolved/ok)
-//   '#e5e7eb', // Neutral Gray (background balance)
-//   '#991b1b', // Deep Red (critical)
-// ];
-
-// Custom label positioning to avoid overlap
+// ✅ Responsive label rendering
 const renderCustomLabel = (props: any) => {
-  const { cx, cy, midAngle, innerRadius, outerRadius, percent, name } = props;
+  const { cx, cy, midAngle, outerRadius, percent, name } = props;
   const RADIAN = Math.PI / 180;
-  const radius = outerRadius + 20; // push labels out more
+  const radius = outerRadius * 1.2;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
@@ -58,10 +32,10 @@ const renderCustomLabel = (props: any) => {
     <text
       x={x}
       y={y}
-      fill="#000"
+      fill="#111827"
       textAnchor={x > cx ? 'start' : 'end'}
       dominantBaseline="central"
-      fontSize={12}
+      className="text-[10px] sm:text-xs md:text-sm lg:text-base"
     >
       {`${name} (${(percent * 100).toFixed(0)}%)`}
     </text>
@@ -102,24 +76,26 @@ export default function EnvironmentPie() {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-6">
-      <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">
+    
+    <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-4 sm:p-6 w-full">
+      {/* <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 mb-4 text-center">
         Environment Distribution
-      </h3>
+      </h3> */}
 
-      <div className="w-full max-w-4xl mx-auto" style={{ height: '360px' }}>
+      {/* ✅ Fully responsive chart container */}
+      <div className="w-full h-[40vh] min-h-[280px]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
               data={data}
               dataKey="value"
               nameKey="name"
-              cx="40%"
+              cx="50%"
               cy="50%"
-              outerRadius="70%"
-              innerRadius="35%"
+              outerRadius="80%"
+              innerRadius="40%"
               labelLine={true}
-              label={renderCustomLabel} // custom label renderer
+              label={renderCustomLabel}
               paddingAngle={2}
             >
               {data.map((_, index) => (
@@ -145,14 +121,16 @@ export default function EnvironmentPie() {
               ]}
             />
 
+            {/* ✅ Legend moved to bottom and horizontal */}
             <Legend
-              layout="vertical"
-              verticalAlign="middle"
-              align="right"
+              layout="horizontal"
+              verticalAlign="bottom"
+              align="center"
               iconType="circle"
               wrapperStyle={{
-                fontSize: 12,
-                lineHeight: '22px',
+                fontSize: '12px',
+                lineHeight: '20px',
+                marginTop: '8px',
               }}
             />
           </PieChart>
